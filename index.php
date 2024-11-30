@@ -1,22 +1,17 @@
 <?php
 include 'session.php';
-check_session(); //on vérifie si la personne à le droit d'accéder à cette page
-require 'config.php';
+check_session();
+include 'config.php';
 
+// Récupération des tâches
+$sql = "SELECT * FROM tache "; // la requete 
+$stmt = $pdo->prepare($sql); // on  prepare la requete pour qu'elle s'excute
+$stmt->execute(); // on execute la requete
+$taches = $stmt->fetchAll(); // on affiche toute la requete fetchAll()
 
-// Connexion à la base de données
-$pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
-
-// Récupérer les tâches
-$stmt = $pdo->query("SELECT id,title,is_completed FROM tache");
-$tache = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-
-
-
-
-
+echo "<pre>"; 
+print_r($taches); 
+echo "</pre>"; 
 ?>
 
 <!DOCTYPE html>
@@ -24,22 +19,26 @@ $tache = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
 </head>
 <body>
-    <div class="container">
-        <div class="title">
-    <h1>To do list !</h1>
-    </div>
-<form action="">
-<section class="tache">
-   <label for="tache-1">Rangez la chambre.<input type="checkbox" name ="tache1" id="tache-1"></label>
-   <label for="tache-2">Faire la vaisselle. <input type="checkbox" name ="tache2" id="tache-2"></label>
-    <label for="tache-3">Sortir la poubelle. <input type="checkbox" name ="tache3" id="tache-3"></label>
-    <button type="submit">Enregistrer</button>
-</form>
-</section>
-    </div>
+    <h1>To-Do List</h1>
+
+    <!-- Formulaire pour ajouter une tâche -->
+    <form action="create-tache.php" method="post">
+        <input type="text" name="title" placeholder="Ajouter une tâche">
+        <button type="submit">Ajouter</button>
+    </form>
+
+    <!-- Liste des tâches -->
+    <ul>
+        <?php foreach ($taches as $tache): ?>
+            <li>
+                <?= htmlspecialchars($tache['title']); ?>
+                <a href="delete-tache.php?id=<?= $tache['id']; ?>">Supprimer</a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
 </body>
 </html>

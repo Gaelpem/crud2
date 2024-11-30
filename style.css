@@ -28,13 +28,3 @@ flex-direction: column;
 width: 180px;
 
 }
-label{
-    margin-top:1rem; 
-   color: rgb(4, 90, 4);
-   padding:1rem; 
-   border-radius: 7px;
-   border: 4px solid rgb(39, 109, 39);
-   display: flex;
-justify-content: space-between;
-
-}
