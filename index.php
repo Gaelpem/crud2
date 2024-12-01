@@ -6,8 +6,8 @@ require_once 'config.php';
 
 $sql = "SELECT * FROM tache"; 
 $stmt = $pdo->prepare($sql); 
-$tmt->execute(); 
-$taches = $tmt->fetchAll(); 
+$stmt->execute(); 
+$taches = $stmt->fetchAll(); 
 
 ?>
 
@@ -21,6 +21,16 @@ $taches = $tmt->fetchAll();
 <body>
     <div class="container">
         <h1>To do list </h1>
-      
+      <?php include 'create-tache.php'?>
+    
+      <ul class="parent">
+      <?php foreach($taches as $tache): ?>
+        <li>
+            <?= htmlspecialchars($tache['title']);?>
+            <?php include 'delete-tache.php'?>
+        </li>
+        <?php endforeach; ?>
+      </ul>
+</div> 
 </body>
 </html>
