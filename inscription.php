@@ -34,37 +34,38 @@ class Utilisateur{
         }
     }
 
-    public function setNom($nom)
+    public function setNom($nom) : void 
     {
           $nom = strtolower($nom); 
             if(ctype_alpha($nom)){
                 if(iconv_strlen($nom)>= 3 && iconv_strlen($nom)<= 20){
                     $this->nom = $nom; 
                 }else{
-                    echo sel::ERROR_NOM ; 
+                    echo self::ERROR_NOM ; 
                 }
             }else{
-                echo sel::ERROR_NOM ; 
+                echo self::ERROR_NOM ; 
             }
           }
 
 
-          public function setPrenom($prenom)
+          public function setPrenom($prenom) : void 
     {
           $prenom = strtolower($prenom); 
             if(ctype_alpha($nom)){
                 if(iconv_strlen($prenom)>= 3 && iconv_strlen($prenom)<= 20){
                     $this->prenom = $prenom; 
                 }else{
-                    echo sel::ERROR_PRENOM; 
+                    echo self::ERROR_PRENOM; 
                 }
             }else{
-                echo sel::ERROR_PRENOM ; 
+                echo self::ERROR_PRENOM ; 
             }
           }
 
 
-          public function setEmail($email){
+          public function setEmail($email) : void 
+          {
                $email = strtolower($email);
                if(filter_var($email,FILTER_DEFAULT)){
                 $this->email = $email;
@@ -73,14 +74,15 @@ class Utilisateur{
                }
           }
           
-          public function setMdp($mdp){
+          public function setMdp($mdp) : void 
+          {
             $mdp= strtolower($mdp);
             $caractereSpeciaux = "!?:%*$"; 
             $contientCaractereSpecial = false;
             //on decoupe chaque element pour les transformer en tableaux 
             foreach(str_split($caractereSpeciaux) as $caractere){
                 //on verifie si le mdp contient au moins un caractere special 
-                if(strpos($mdp, ) !== false){
+                if(strpos($mdp, $caractere) !== false){
                     $contientCaractereSpecial = true;
                 break; // On peut arrêter la boucle dès qu'on trouve un caractère spécial
                 }
@@ -89,7 +91,7 @@ class Utilisateur{
             $this->mdp = $mdp;
        }
      
-       public function getNom(){
+       public function getNom() {
         return $this->nom ; 
        }
        public function getPrenom(){
@@ -109,10 +111,31 @@ class Utilisateur{
     if($_SERVER["REQUEST_METHOD"] == "POST"){
          
         if (isset($_POST["user_name"], $_POST["user_prenom"], $_POST["user_email"], $_POST["user_mdp"])) {
-            // Code à exécuter si les données POST existent
+            $user_name = trim($_POST["user_name"]); 
+            $user_prenom = trim($_POST["user_prenom"]); 
+            $user_email = trim($_POST["user_email"]); 
+            $user_mdp = trim($_POST["user_mdp"]); 
+
+
+         if(!empty($user_name) && !empty($user_prenom) && !empty($user_email) && !empty($user_mdp)){
+            
+            $utilisateur = new Utilisateur($user_name,$user_prenom,$user_email,$user_mdp); 
+            
+            // on sauvegarde les données de l'utilisateurs dans session
+            $_SESSION["user_name"] = $utilisateur->getNom(); 
+            $_SESSION["user_prenom"] = $utilisateur->getPrenom(); 
+            $_SESSION["user_email"] = $utilisateur->getEmail(); 
+            $_SESSION["user_mdp"] = $utilisateur->getMdp(); 
+            // des que l'utilisateur a reussi à tout remplier le dirige dans une page 
+            header("Location: index.php"); 
+            exit; 
+
+         }
+
+        }
         }
         
-    }
+
 ?>
 
 
@@ -127,7 +150,7 @@ class Utilisateur{
     <title>Document</title>
 </head>
 <body>
-<form action="" method="post">
+<form action="<?= $_SERVER["PHP_SELF"]; ?>" method="post">
     <label for="">Nom</label>
     <input type="text" name="user_name" id="">
 
@@ -139,7 +162,7 @@ class Utilisateur{
 
     
     <label for="">Mot de passe</label>
-    <input type="text" name="user_mdp" id="">
+    <input type="password" name="user_mdp" id="">
 
     <button type="submit">Inscription</button>
 

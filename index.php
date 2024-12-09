@@ -14,7 +14,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Bienvenue</h1>
+    <h1>Bienvenue !</h1>
     <form action="" method="post">
     <button type="submit">Deconnexion</button>
     </form>
