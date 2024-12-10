@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : dim. 08 déc. 2024 à 15:55
+-- Généré le : lun. 09 déc. 2024 à 12:10
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.2.20
 
@@ -24,15 +24,15 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `connexion`
+-- Structure de la table `utilisateur`
 --
 
-CREATE TABLE `connexion` (
+CREATE TABLE `utilisateur` (
   `id` int NOT NULL,
-  `first_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `last_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `nom` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `prenom` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+  `mdp` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -40,20 +40,20 @@ CREATE TABLE `connexion` (
 --
 
 --
--- Index pour la table `connexion`
+-- Index pour la table `utilisateur`
 --
-ALTER TABLE `connexion`
+ALTER TABLE `utilisateur`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `@` (`email`);
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
 --
 
 --
--- AUTO_INCREMENT pour la table `connexion`
+-- AUTO_INCREMENT pour la table `utilisateur`
 --
-ALTER TABLE `connexion`
+ALTER TABLE `utilisateur`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 COMMIT;
 
