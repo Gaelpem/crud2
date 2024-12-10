@@ -1,7 +1,8 @@
 <?php
-include "session.php"; 
+include "session.php";
+ 
 if(!isset($_SESSION["user_name"])){
-    header("Location: inscription.php");
+    header("Location: login.php");
     exit; 
 }
 

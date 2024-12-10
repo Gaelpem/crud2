@@ -4,7 +4,10 @@ check_session(); //on vérifie si la personne a le droit d'accéder à cette pag
 require_once'config.php'; //accès à la base de données
 
 // si la personne est deja connectée elle sera dirigé à la page index.php; 
-
+if(isset($SESSION["user_name"])){
+    header("Locaaton: index;php"); 
+    exit; 
+}
 class Utilisateur{
 
     const ERROR_NOM = "Nom incorrect"; 
@@ -69,17 +72,58 @@ class Utilisateur{
                     if(strpos($mdp, $caractere) !== false){
                         $caractereSpe = true ; 
                     }else{
-                        throw new 
+                        throw new Exception(self::ERROR_MDP);
+                    }
+
+                    if(strlen($mdp) > 10 && preg_match('/[A-Za-z]', $mdp) && preg_match('/[0-9]/', $mdp) && $caractereSpe){
+                        $this->mdp = password_hash($mdp, PASSWORD_BCRYPT); 
+                    }else{
+                        throw new Exception(self::ERROR_MDP); 
                     }
                 }
-
+              
+                $this->mdp = $mdp; 
 
         }
 
 
+        public function getNom() : string {
+            $this->nom; 
+        }
+        public function gePrenom() : string {
+            $this->prenom; 
+        }
+        public function getEmail() : string {
+            $this->email;  
+        }
+
+        public function getMdp() : string {
+            $this->mdp; 
+        }
+
+}
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    if(isset($_POST["user_name"],$_POST["user_prenom"], $_POST["user_email"],  $_POST["user_mdp"])){
+        $user_name = htmlspecialchars(trim($_POST["user_name"]));
+        $user_prenom = htmlspecialchars(trim($_POST["user_prenom"])); 
+        $user_email = htmlspecialchars(trim($_POST["user_email"])); 
+        $user_mdp = htmlspecialchars(trim($_POST["user_mdp"]));   
+    }
+      
+    if(!empty($user_name) && !empty($user_prenom) && !empty($user_email) && !empty($user_mdp)){
+        try{
+            $utilisateur = new Utilisateur($user_name, $user_prenom,  $user_email, $user_mdp); 
 
 
-    
+            $stmt = $pdp->prepare("SELECT FROM  email FROM utilisateur where email = :email "); 
+            $stmt->execute([$utilisateur->getEmail()]);
+            if ($stmt->rowCount() > 0) {
+                throw new Exception("Cet email est déjà utilisé.");
+        }
+    }
+
+
+
 
 }
     
